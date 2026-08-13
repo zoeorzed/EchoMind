@@ -1,9 +1,11 @@
 target/
 .mvn/apache-maven-*/
 .mvn/*.zip
+.mvn/wrapper/maven-wrapper.jar
 .idea/
 .vscode/
 .DS_Store
 .env
 *.log
 data/
+/src/main/java/Main.java

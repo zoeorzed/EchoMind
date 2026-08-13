@@ -5,3 +5,7 @@ target/
 .env
 *.log
 data/
+.mvn/apache-maven-*/
+.mvn/*.zip
+.mvn/wrapper/maven-wrapper.jar
+/src/main/java/Main.java

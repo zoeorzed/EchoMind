@@ -1,6 +1,6 @@
-# EchoMind Java
+# EchoMind 
 
-EchoMind Java 是一个企业级智能客服系统，基于 Java 21、Spring Boot 3.5、Spring AI 1.1 和 LangChain4j 实现。当前版本覆盖智能客服主链路：对话请求、Redis 工作记忆、知识库检索、多 Agent 路由、LLM 模型调用、回答校验、评测、监控、Swagger 文档和 Docker 部署。
+EchoMind  是一个企业级智能客服系统，基于 Java 21、Spring Boot 3.5、Spring AI 1.1 和 LangChain4j 实现。当前版本覆盖智能客服主链路：对话请求、Redis 工作记忆、知识库检索、多 Agent 路由、LLM 模型调用、回答校验、评测、监控、Swagger 文档和 Docker 部署。
 
 ## 技术栈
 

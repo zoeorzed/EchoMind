@@ -1,6 +1,6 @@
 # NexusOps
 
-![NexusOps Enterprise Multi-Agent Operations Platform](docs/assets/nexusops-social-preview.png)
+![NexusOps Enterprise Multi-Agent Operations Platform](docs/assets/nexusops-social-preview.jpg)
 
 > 支持知识增强、记忆、结构化多 Agent 路由与评测闭环的企业智能运营协同中枢
 

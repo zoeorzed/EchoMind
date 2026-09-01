@@ -1,5 +1,7 @@
 # NexusOps
 
+![NexusOps Enterprise Multi-Agent Operations Platform](docs/assets/nexusops-social-preview.png)
+
 > 支持知识增强、记忆、结构化多 Agent 路由与评测闭环的企业智能运营协同中枢
 
 NexusOps 是 EchoMind Java 工程面向企业运营协同场景的产品化表达。它将订单履约、技术故障、账务异常、政策咨询和人工升级等请求统一接入一条可治理的 Agent 处理链路，而不只是完成单轮问答。
@@ -223,7 +225,7 @@ NexusOps 当前是可运行的 Java 工程实现，同时保留清晰的演进�
 - 工具治理目前聚焦 `knowledge_search`，尚未扩展为通用 MCP Tool Registry
 - 请求轨迹保存在进程内的有界队列中，重启后不会保留
 - 高风险请求提供升级标记，真实工单或人工队列需要对接企业系统
-- 仓库当前以编译验证为主，仍需补充自动化接口和回归测试
+- 已覆盖意图识别、主辅路由、请求轨迹和熔断状态的核心单元测试；仍需扩展控制器与端到端回归测试
 
 这些边界不会影响当前演示链路，也避免将规划能力描述成已经完成的实现。
 

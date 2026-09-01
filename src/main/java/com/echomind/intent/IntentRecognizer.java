@@ -139,6 +139,9 @@ public class IntentRecognizer {
             String json = sliceJsonObject(raw);
             Map<String, Object> data = objectMapper.readValue(json, new TypeReference<>() {
             });
+            if (!data.containsKey("intent") || !data.containsKey("confidence")) {
+                throw new IllegalArgumentException("LLM intent response is missing required fields");
+            }
             data.put("intent", parseIntent(String.valueOf(data.get("intent"))));
             return data;
         } catch (Exception ex) {
@@ -220,6 +223,10 @@ public class IntentRecognizer {
         sourceScores.put("pattern", confidence(pattern));
 
         if (Boolean.TRUE.equals(llm.get("failed"))) {
+            IntentCategory patternIntent = (IntentCategory) pattern.getOrDefault("intent", IntentCategory.OTHER);
+            if (SPECIFIC_INTENTS.contains(patternIntent) && confidence(pattern) > 0) {
+                return new VoteResult(patternIntent, confidence(pattern), sourceScores);
+            }
             if (semantic.get("intent") != IntentCategory.OTHER && confidence(semantic) > 0) {
                 return new VoteResult((IntentCategory) semantic.get("intent"), confidence(semantic), sourceScores);
             }

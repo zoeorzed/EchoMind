@@ -20,7 +20,7 @@ public class CircuitBreaker {
         if (state == CircuitState.CLOSED) {
             return true;
         }
-        if (state == CircuitState.OPEN && openedAt != null && Instant.now().isAfter(openedAt.plus(recovery))) {
+        if (state == CircuitState.OPEN && openedAt != null && !Instant.now().isBefore(openedAt.plus(recovery))) {
             state = CircuitState.HALF_OPEN;
             return true;
         }

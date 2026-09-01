@@ -199,7 +199,7 @@ public class AgentOrchestrator {
         List<AgentType> supportingAgents = ordered.stream()
                 .skip(1)
                 .filter(entry -> entry.getKey() != AgentType.GENERAL)
-                .filter(entry -> entry.getValue() >= 0.45 && entry.getValue() >= primaryScore * 0.55)
+                .filter(entry -> entry.getValue() >= 0.45 && entry.getValue() >= primaryScore * 0.50)
                 .map(Map.Entry::getKey)
                 .toList();
         return new RoutingDecision(

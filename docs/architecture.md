@@ -6,6 +6,31 @@ NexusOps 将企业运营请求组织为一条可解释、可观测、可评测�
 
 ## 2. 分层架构
 
+```mermaid
+flowchart TB
+    Client[业务系统 / 用户] --> API[Spring MVC API<br/>chat · search · knowledge · trace · eval]
+    API --> Memory[MemoryManager<br/>Redis 工作记忆 + JSON 长期记忆]
+    API --> Intent[IntentRecognizer<br/>LLM + hash embedding + Pattern]
+    Intent --> RAG[KnowledgeToolManager<br/>缓存 · 超时 · 熔断 · fallback]
+    RAG --> KB[KnowledgeBaseService<br/>BM25 + local hash vector + rerank]
+    Intent --> Router[AgentOrchestrator<br/>主辅 Agent 路由]
+    KB --> Router
+    Memory --> Router
+    Skills[Markdown Skills<br/>运营 · 技术 · 账务] --> Router
+    Router --> General[运营协调 Agent]
+    Router --> Technical[技术可靠性 Agent]
+    Router --> Billing[收入与合规 Agent]
+    General --> Verify[AnswerVerifier]
+    Technical --> Verify
+    Billing --> Verify
+    Verify --> Response[结构化 ChatResponse]
+    Router --> Trace[RequestTraceStore]
+    Router --> Monitor[Micrometer / Prometheus]
+    Router --> Eval[EndToEndEvaluator<br/>Intent 指标 + LLM-as-Judge]
+```
+
+上图对应当前 Java 主链路；ChromaDB 仍是预留依赖，不画成已投入使用的主向量库。
+
 ```text
 接入层
   EchoMindController

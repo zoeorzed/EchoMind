@@ -31,6 +31,17 @@ class RequestTraceStoreTest {
         assertThat(store.find("req-204")).isPresent();
     }
 
+    @Test
+    void updatesFinalEscalationWithoutDuplicatingTrace() {
+        RequestTraceStore store = new RequestTraceStore();
+        store.record(trace("req-final", "2026-09-01T00:00:00Z"));
+
+        store.updateEscalated("req-final", true);
+
+        assertThat(store.find("req-final")).get().extracting(RequestToolTrace::escalated).isEqualTo(true);
+        assertThat(store.recent(10)).hasSize(1);
+    }
+
     private RequestToolTrace trace(String requestId, String timestamp) {
         return new RequestToolTrace(
                 requestId,

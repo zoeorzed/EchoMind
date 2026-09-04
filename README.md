@@ -1,5 +1,7 @@
 # NexusOps
 
+[![Java CI](https://github.com/zoeorzed/NexusOps/actions/workflows/ci.yml/badge.svg)](https://github.com/zoeorzed/NexusOps/actions/workflows/ci.yml)
+
 ![NexusOps Enterprise Multi-Agent Operations Platform](docs/assets/nexusops-social-preview.jpg)
 
 > 支持知识增强、记忆、结构化多 Agent 路由与评测闭环的企业智能运营协同中枢
@@ -113,7 +115,7 @@ NexusOps 将这条流程工程化：
 | 评测 | Intent 指标、Macro-F1、LLM-as-Judge、回归检测 |
 | 部署 | Docker Compose、Nginx、Redis、Prometheus、ChromaDB 预留 |
 
-完整的分层架构、核心组件职责和实现边界见 [架构说明](docs/architecture.md)。
+完整的可渲染架构图、分层职责和实现边界见 [架构说明](docs/architecture.md)。真实 Java API、RAG 和 Agent Trace 输出见 [运行示例](docs/api-examples.md)。
 
 ## 项目结构
 
@@ -167,6 +169,16 @@ curl -X POST http://localhost:8080/chat \
 ```
 
 响应会包含请求 ID、意图、意图组、结构化实体、主辅 Agent、路由原因、知识使用和校验状态等信息。
+
+## 可复现评测
+
+仓库提供与 Java 版细粒度意图枚举一致的 [评测集](evaluation/eval-dataset.json)、[运行脚本](scripts/run-evaluation.ps1) 和 [LLM-as-Judge 报告](docs/evaluation-report.md)。
+
+```powershell
+.\scripts\run-evaluation.ps1
+```
+
+没有真实模型密钥时，流程仍可做离线烟测，但对话 Judge 会明确标记 `judge_failed=true` 并返回 0.5 fallback；该分数不能当作真实模型质量指标。
 
 ## 快速启动
 

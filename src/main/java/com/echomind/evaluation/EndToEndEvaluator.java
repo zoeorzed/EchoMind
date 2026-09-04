@@ -96,6 +96,7 @@ public class EndToEndEvaluator {
             }
         }
         long passed = results.stream().filter(r -> Boolean.TRUE.equals(r.get("passed"))).count();
+        long judgeFallbackCount = results.stream().filter(this::judgeFallbackUsed).count();
         double intentAccuracy = intentCases.isEmpty() ? 0.0 : (double) intentCorrect / intentCases.size();
         Map<String, Object> avgScores = new HashMap<>();
         avgScores.put("intent_accuracy", round(intentAccuracy));
@@ -110,6 +111,7 @@ public class EndToEndEvaluator {
                 "per_class", perClassMetrics(predictions, groundTruth),
                 "regressions", regressions,
                 "recommendations", recommendations(intentAccuracy, regressions),
+                "judge_fallback_count", judgeFallbackCount,
                 "results", results
         );
         saveBaseline(report);
@@ -118,15 +120,24 @@ public class EndToEndEvaluator {
 
     private List<EvalRunRequest.IntentCase> defaultIntentCases() {
         return List.of(
-                new EvalRunRequest.IntentCase("我的订单什么时候到？", "query"),
+                new EvalRunRequest.IntentCase("我的订单什么时候到？", "logistics"),
                 new EvalRunRequest.IntentCase("帮我取消订单", "request"),
                 new EvalRunRequest.IntentCase("你们服务太差了！", "complaint"),
-                new EvalRunRequest.IntentCase("应用一直报500错误", "technical"),
+                new EvalRunRequest.IntentCase("应用一直报500错误", "technical_crash"),
                 new EvalRunRequest.IntentCase("为什么扣了两次款？", "billing"),
-                new EvalRunRequest.IntentCase("我要投诉，转人工！", "escalation"),
+                new EvalRunRequest.IntentCase("我要投诉，转人工！", "human_handoff"),
                 new EvalRunRequest.IntentCase("你好", "greeting"),
                 new EvalRunRequest.IntentCase("修改我的邮箱地址", "account")
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean judgeFallbackUsed(Map<String, Object> result) {
+        if (!String.valueOf(result.get("test_id")).startsWith("dialog_")) {
+            return false;
+        }
+        Object metadata = result.get("metadata");
+        return metadata instanceof Map<?, ?> map && Boolean.TRUE.equals(map.get("judge_failed"));
     }
 
     private List<EvalRunRequest.DialogCase> defaultDialogCases() {

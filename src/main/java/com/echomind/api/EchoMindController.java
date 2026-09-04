@@ -132,6 +132,7 @@ public class EchoMindController {
         );
         AnswerVerifier.VerificationResult verification = answerVerifier.verify(request.message(), result.response(), fullContext);
         boolean escalated = result.escalated() || verification.needEscalation();
+        orchestrator.updateTraceEscalated(result.requestId(), escalated);
         memoryManager.addMessage(userId, conversationId, MessageRole.USER, request.message());
         memoryManager.addMessage(userId, conversationId, MessageRole.ASSISTANT, result.response());
         memoryManager.updateProfile(userId, conversationId);

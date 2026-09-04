@@ -56,6 +56,37 @@ public class RequestTraceStore {
         return Optional.ofNullable(byId.get(requestId));
     }
 
+    public synchronized void updateEscalated(String requestId, boolean escalated) {
+        RequestToolTrace current = byId.get(requestId);
+        if (current == null || current.escalated() == escalated) {
+            return;
+        }
+        RequestToolTrace updated = new RequestToolTrace(
+                current.requestId(),
+                current.timestamp(),
+                current.endpoint(),
+                current.userId(),
+                current.conversationId(),
+                current.intent(),
+                current.intentGroup(),
+                current.agentType(),
+                current.primaryAgent(),
+                current.supportingAgents(),
+                current.toolsUsed(),
+                current.toolCalls(),
+                current.knowledgeUsed(),
+                escalated,
+                current.latencyMs()
+        );
+        Deque<RequestToolTrace> replaced = new ArrayDeque<>(traces.size());
+        for (RequestToolTrace trace : traces) {
+            replaced.addLast(requestId.equals(trace.requestId()) ? updated : trace);
+        }
+        traces.clear();
+        traces.addAll(replaced);
+        byId.put(requestId, updated);
+    }
+
     public synchronized List<RequestToolTrace> recent(int limit) {
         if (limit <= 0 || traces.isEmpty()) {
             return List.of();

@@ -116,6 +116,10 @@ public class AgentOrchestrator {
         return traceStore.recent(limit);
     }
 
+    public void updateTraceEscalated(String requestId, boolean escalated) {
+        traceStore.updateEscalated(requestId, escalated);
+    }
+
     private OrchestratorResult runParallel(AgentRequest req, RoutingDecision decision, List<ToolCallTrace> externalToolCalls) {
         Instant start = Instant.now();
         List<AgentType> targets = decision.agentTypes();
